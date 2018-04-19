@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Roguelike", "Roguelike\Roguelike.csproj", "{55EBC741-608C-4D04-962C-F1C10761EF88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRogue.Core", "NetRogue.Core\NetRogue.Core.csproj", "{116B820B-1D99-4F16-8AA8-2094FAF9282D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRouge.CMD", "NetRouge.Console\NetRouge.CMD.csproj", "{D1B9A51F-0E95-4589-B364-9E76D70A3304}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{55EBC741-608C-4D04-962C-F1C10761EF88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{55EBC741-608C-4D04-962C-F1C10761EF88}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{55EBC741-608C-4D04-962C-F1C10761EF88}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{55EBC741-608C-4D04-962C-F1C10761EF88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{116B820B-1D99-4F16-8AA8-2094FAF9282D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{116B820B-1D99-4F16-8AA8-2094FAF9282D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{116B820B-1D99-4F16-8AA8-2094FAF9282D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{116B820B-1D99-4F16-8AA8-2094FAF9282D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1B9A51F-0E95-4589-B364-9E76D70A3304}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1B9A51F-0E95-4589-B364-9E76D70A3304}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1B9A51F-0E95-4589-B364-9E76D70A3304}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1B9A51F-0E95-4589-B364-9E76D70A3304}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
