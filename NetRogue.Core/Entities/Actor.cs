@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace NetRogue.Core {
-    public abstract class Actor {
+    public abstract class Actor : IEntity {
         Point position;
         public Point Position { get => position; }
         public abstract Tile Glyph { get; }
@@ -31,12 +31,14 @@ namespace NetRogue.Core {
             position += dir;
         }
 
-        internal void Attack(Actor other) {
-            other.HitBy(this);
+        internal void Attack(Actor defender) {
+            if (defender.IsAlive) {
+                defender.Damage(this, Strength);
+            }
         }
 
-        private void HitBy(Actor other) {
-            Health -= Math.Max(other.Strength - Defence, 1);
+        private void Damage(Actor attacker, int damage) {
+            Health -= Math.Max(damage - Defence, 1);
         }
     }
 }

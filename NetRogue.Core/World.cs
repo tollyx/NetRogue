@@ -12,20 +12,27 @@ namespace NetRogue.Core {
 
         public IReadOnlyList<Actor> Actors { get => actors; }
         List<Actor> actors;
+        QuadTree<Actor> tree;
         public Actor Player { get; private set; }
+        public QuadTree<Actor> Tree { get => tree; }
 
         public World() {
             ticks = 0;
-            level = Level.GenerateMazeLevel(120, 30, Environment.TickCount);
+            level = Level.GenerateMazeLevel(64, 24, Environment.TickCount);
+            Player = new Player(11, 11);
             actors = new List<Actor> {
-                new Player(10, 10),
-                new Goblin(2, 2),
+                Player,
+                new Goblin(3, 3),
             };
-            Player = actors[0];
+            tree = new QuadTree<Actor>(new Rect(64, 24));
+            foreach (var item in actors) {
+                tree.Add(item);
+            }
+
         }
 
         public Actor GetActorAt(Point pos) {
-            return actors.FirstOrDefault(act => act.Position == pos);
+            return tree.GetAt(pos);
         }
 
         public bool IsPlayerTurn() {
@@ -51,6 +58,7 @@ namespace NetRogue.Core {
         public void Cleanup() {
             for (int i = actors.Count - 1; i >= 0; i--) {
                 if (!actors[i].IsAlive) {
+                    tree.Remove(actors[i]);
                     actors.RemoveAt(i);
                     if (currentActor > i) {
                         currentActor--;

@@ -27,6 +27,7 @@ namespace NetRogue.CMD {
                     //ActorAction action = input.Parse(key);
                     //world.SetPlayerAction(action);
                     switch (key.Key) {
+                        // Movement
                         case ConsoleKey.UpArrow:
                         case ConsoleKey.K:
                             world.SetPlayerAction(new MoveAction(world.Player, Direction.Up));

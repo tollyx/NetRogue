@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace NetRogue.CMD {
-    public struct Glyph {
+    public struct Glyph : IEquatable<Glyph> {
         public char character;
         public ConsoleColor fore;
         public ConsoleColor back;
@@ -32,6 +32,12 @@ namespace NetRogue.CMD {
             hashCode = hashCode * -1521134295 + fore.GetHashCode();
             hashCode = hashCode * -1521134295 + back.GetHashCode();
             return hashCode;
+        }
+
+        public bool Equals(Glyph other) {
+            return character == other.character &&
+                   fore == other.fore &&
+                   back == other.back;
         }
 
         public static bool operator ==(Glyph a, Glyph b) {

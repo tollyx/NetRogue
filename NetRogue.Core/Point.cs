@@ -1,5 +1,7 @@
-﻿namespace NetRogue.Core {
-    public struct Point {
+﻿using System;
+
+namespace NetRogue.Core {
+    public struct Point : IEquatable<Point> {
         public int x;
         public int y;
 
@@ -30,11 +32,11 @@
         }
 
         public static bool operator ==(Point a, Point b) {
-            return a.x == b.x && a.y == b.y;
+            return a.Equals(b);
         }
 
         public static bool operator !=(Point a, Point b) {
-            return a.x != b.x || a.y != b.y;
+            return !a.Equals(b);
         }
 
         public void Deconstruct(out int x, out int y) {
@@ -48,8 +50,7 @@
             }
 
             var point = (Point)obj;
-            return x == point.x &&
-                   y == point.y;
+            return x == point.x && y == point.y;
         }
 
         public override int GetHashCode() {
@@ -58,6 +59,10 @@
             hashCode = hashCode * -1521134295 + x.GetHashCode();
             hashCode = hashCode * -1521134295 + y.GetHashCode();
             return hashCode;
+        }
+
+        public bool Equals(Point other) {
+            return x == other.x && y == other.y;
         }
     }
 }

@@ -20,8 +20,12 @@
             var newpos = actor.Position + dir.ToPoint();
             Actor other = world.GetActorAt(newpos);
             if (other == null) {
-                if (world.Level.IsInsideBounds(newpos) && world.Level.GetTile(newpos) != Tile.Wall)
+                if (world.Level.IsInsideBounds(newpos) && world.Level.GetTile(newpos) != Tile.Wall) {
+                    world.Tree.Remove(actor);
                     actor.Move(dir);
+                    world.Tree.Add(actor);
+                }
+                    
             }
             else {
                 actor.Attack(other);
