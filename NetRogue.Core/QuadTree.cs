@@ -8,18 +8,22 @@ using System.Threading.Tasks;
 namespace NetRogue.Core {
     public class QuadTree<T> : IEnumerable<T> where T: class, IEntity {
         readonly Rect bounds;
+        readonly int depth;
+        readonly int maxDepth;
+        readonly int maxEntities;
+
         QuadTree<T>[] children;
         List<T> entities;
-        int depth;
-        int maxDepth;
-        int maxEntities;
 
-        public QuadTree(Rect bounds, int maxEntities = 10, int maxDepth = 3, int atDepth = 0) {
+        public QuadTree(Rect bounds, int maxEntities = 10, int maxDepth = 3) : this(bounds, maxEntities, maxDepth, 0) {}
+
+        private QuadTree(Rect bounds, int maxEntities, int maxDepth, int atDepth) {
             this.bounds = bounds;
-            entities = new List<T>();
             this.maxDepth = maxDepth;
             this.maxEntities = maxEntities;
             depth = atDepth;
+            entities = new List<T>();
+            children = null;
         }
 
         public bool Add(T entity) {
@@ -64,7 +68,7 @@ namespace NetRogue.Core {
             int childW = bounds.w / 2;
             int childH = bounds.h / 2;
 
-            children = new QuadTree<T>[4] {
+            children = new QuadTree<T>[] {
                 new QuadTree<T>(new Rect(bounds.Left, bounds.Top, bounds.w / 2, bounds.h / 2), maxDepth, depth+1),
                 new QuadTree<T>(new Rect(bounds.Left + bounds.w / 2, bounds.Top, bounds.w / 2, bounds.h / 2), maxDepth, depth+1),
                 new QuadTree<T>(new Rect(bounds.Left, bounds.Top + bounds.h / 2, bounds.w / 2, bounds.h / 2), maxDepth, depth+1),
@@ -104,10 +108,44 @@ namespace NetRogue.Core {
             foreach (var item in children) {
                 var e = item.GetAt(pos);
                 if (e != null) {
-                    return null;
+                    return e;
                 }
             }
             return null;
+        }
+
+        public IEnumerable<T> GetMultipleAt(Point pos) {
+            if (!bounds.Contains(pos)) yield break;
+
+            if (children == null) {
+                foreach (var item in entities.Where(e => e.Position == pos)) {
+                    yield return item;
+                }
+                yield break;
+            }
+
+            foreach (var item in children) {
+                foreach (var e in item.GetMultipleAt(pos)) {
+                    yield return e;
+                }
+            }
+        }
+
+        public bool Cleanup() {
+            if (children == null) {
+                return !entities.Any();
+            }
+
+            bool isClean = true;
+            foreach (var item in children) {
+                isClean = item.Cleanup() && isClean;
+            }
+
+            if (isClean) {
+                children = null;
+                entities = new List<T>();
+            }
+            return isClean;
         }
 
         public IEnumerator<T> GetEnumerator() {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Linq;
 using NetRogue.Core;
 
 namespace NetRogue.CMD {
@@ -73,7 +74,7 @@ namespace NetRogue.CMD {
         internal void Draw(World world) {
             Clear();
 
-            Rect mapArea = new Rect(8, 0, world.Level.Width+1, world.Level.Height+1);
+            Rect mapArea = new Rect(6, 0, world.Level.Width+1, world.Level.Height+1);
             Point offset = new Point(0, 0);
 
             Draw(world.Level, offset.x, offset.y, mapArea);
@@ -85,9 +86,21 @@ namespace NetRogue.CMD {
                 }
             }
 
-            Draw($"HP:{world.Player.Health}", 1, 1);
-            Draw($"STR:{world.Player.Strength}", 1, 2);
-            Draw($"DEF:{world.Player.Defence}", 1, 3);
+            //var path = PathFinder.AStar(world.Level, world.Player.Position, world.Actors.Skip(1).First().Position);
+            //foreach (var item in path) {
+            //    Point screenpos = item - offset + mapArea.TopLeft;
+            //    screen[ToIndex(screenpos)].back = ConsoleColor.DarkYellow;
+            //}
+
+            Draw($"HP:{world.Player.Health}", 0, 0);
+            Draw($"STR:{world.Player.Strength}", 0, 1);
+            Draw($"DEF:{world.Player.Defence}", 0, 2);
+
+            var msg = world.Log.Messages.Reverse<string>().Take(height - mapArea.Bottom).Reverse();
+            var y = height-1;
+            foreach (var item in msg) {
+                Draw(item, 0, y--);
+            }
 
             CalcDirty();
         }

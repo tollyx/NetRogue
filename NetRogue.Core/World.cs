@@ -15,20 +15,23 @@ namespace NetRogue.Core {
         QuadTree<Actor> tree;
         public Actor Player { get; private set; }
         public QuadTree<Actor> Tree { get => tree; }
+        public Log Log { get; private set; }
 
         public World() {
+            Log = new Log();
             ticks = 0;
             level = Level.GenerateMazeLevel(64, 24, Environment.TickCount);
-            Player = new Player(11, 11);
+            Player = new Player(1, 1);
             actors = new List<Actor> {
                 Player,
-                new Goblin(3, 3),
+                new Goblin(1, 23),
+                new Goblin(63, 1),
+                new Goblin(63, 23),
             };
             tree = new QuadTree<Actor>(new Rect(64, 24));
             foreach (var item in actors) {
                 tree.Add(item);
             }
-
         }
 
         public Actor GetActorAt(Point pos) {
@@ -39,19 +42,36 @@ namespace NetRogue.Core {
             return actors[currentActor].IsPlayer;
         }
 
-        public void SetPlayerAction(ActorAction action) {
+        public void SetPlayerAction(IActorAction action) {
             Player.Action = action;
+        }
+
+        public void SetPlayerMove(Direction dir) {
+            var act = GetActorAt(Player.Position + dir.ToPoint());
+            if (act == null) {
+                SetPlayerAction(new MoveAction(Player, dir));
+            }
+            else {
+                SetPlayerAction(new AttackAction(Player, act));
+            }
         }
 
         public bool Tick() {
             ticks++;
+            var current = actors[currentActor];
+            current.Think(this);
+            if (current.Action == null) return false;
 
-            actors[currentActor].Action?.Execute(this);
-            actors[currentActor].Action = null;
+            if (current.Action.Execute(this)) {
+                current.Tick(this);
+                current.Action = null;
 
-            currentActor++;
-            Cleanup();
-            currentActor %= actors.Count;
+                currentActor++;
+                Cleanup();
+                currentActor %= actors.Count;
+                return true;
+            }
+            current.Action = null;
             return false;
         }
 
@@ -65,6 +85,7 @@ namespace NetRogue.Core {
                     }
                 }
             }
+            tree.Cleanup();
         }
     }
 }

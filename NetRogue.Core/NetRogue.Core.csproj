@@ -40,14 +40,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\IActorAction.cs" />
     <Compile Include="Entities\Actor.cs" />
-    <Compile Include="ActorAction.cs" />
+    <Compile Include="Actions\ActorAction.cs" />
     <Compile Include="Direction.cs" />
+    <Compile Include="Actions\AttackAction.cs" />
     <Compile Include="Entities\Goblin.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\Player.cs" />
+    <Compile Include="Actions\WaitAction.cs" />
+    <Compile Include="ILogger.cs" />
     <Compile Include="InputMap.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="Actions\MoveAction.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="PathFinder.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuadTree.cs" />

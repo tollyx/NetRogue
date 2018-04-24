@@ -31,8 +31,33 @@ namespace NetRogue.Core {
             };
         }
 
+        internal Direction Direction() {
+            if (Math.Abs(x) > Math.Abs(y)) {
+                if (x == 0) {
+                    return Core.Direction.None;
+                }
+                else return x < 0 ? Core.Direction.Left : Core.Direction.Right;
+            }
+            else {
+                if (y == 0) {
+                    return Core.Direction.None;
+                }
+                else return y < 0 ? Core.Direction.Up : Core.Direction.Down;
+            }
+        }
+
         public static bool operator ==(Point a, Point b) {
             return a.Equals(b);
+        }
+
+        internal static float Distance(Point start, Point end) {
+            return (float)Math.Sqrt(DistanceSquared(start, end));
+        }
+
+        public static float DistanceSquared(Point start, Point end) {
+            float dx = start.x - end.x;
+            float dy = start.y - end.y;
+            return dx * dx + dy * dy;
         }
 
         public static bool operator !=(Point a, Point b) {

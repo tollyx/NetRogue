@@ -20,7 +20,7 @@ namespace NetRogue.CMD {
             screen.Draw(world);
             screen.Display();
             while (running) {
-                if (world.IsPlayerTurn()) {
+                if (world.IsPlayerTurn() || !world.Player.IsAlive) {
                     (int x, int y) = world.Player.Position;
                     Console.SetCursorPosition(x, y);
                     var key = Console.ReadKey(true);
@@ -28,21 +28,27 @@ namespace NetRogue.CMD {
                     //world.SetPlayerAction(action);
                     switch (key.Key) {
                         // Movement
-                        case ConsoleKey.UpArrow:
                         case ConsoleKey.K:
-                            world.SetPlayerAction(new MoveAction(world.Player, Direction.Up));
+                        case ConsoleKey.UpArrow:
+                            world.SetPlayerMove(Direction.Up);
                             break;
                         case ConsoleKey.J:
                         case ConsoleKey.DownArrow:
-                            world.SetPlayerAction(new MoveAction(world.Player, Direction.Down));
+                            world.SetPlayerMove(Direction.Down);
                             break;
                         case ConsoleKey.H:
                         case ConsoleKey.LeftArrow:
-                            world.SetPlayerAction(new MoveAction(world.Player, Direction.Left));
+                            world.SetPlayerMove(Direction.Left);
                             break;
                         case ConsoleKey.L:
                         case ConsoleKey.RightArrow:
-                            world.SetPlayerAction(new MoveAction(world.Player, Direction.Right));
+                            world.SetPlayerMove(Direction.Right);
+                            break;
+                        case ConsoleKey.Spacebar:
+                            world.SetPlayerAction(new WaitAction());
+                            break;
+                        case ConsoleKey.Escape:
+                            running = false;
                             break;
                         default:
                             break;

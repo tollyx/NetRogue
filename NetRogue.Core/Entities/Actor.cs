@@ -10,7 +10,8 @@ namespace NetRogue.Core {
         public int Health { get; protected set; }
         public int Strength { get; protected set; }
         public int Defence { get; protected set; }
-        public ActorAction Action { get; set; }
+        public IActorAction Action { get; set; }
+        public abstract string Name { get; }
 
         public Actor(int x, int y) {
             position = new Point(x, y);
@@ -31,14 +32,22 @@ namespace NetRogue.Core {
             position += dir;
         }
 
-        internal void Attack(Actor defender) {
+        internal virtual void Attack(Actor defender) {
             if (defender.IsAlive) {
-                defender.Damage(this, Strength);
+                defender.Defend(this, Strength);
             }
         }
 
-        private void Damage(Actor attacker, int damage) {
+        internal virtual void Defend(Actor attacker, int damage) {
             Health -= Math.Max(damage - Defence, 1);
         }
+
+        public virtual void Tick(World world) {
+            if (IsAlive) {
+                // Do stuff
+            }
+        }
+
+        public virtual void Think(World world) { }
     }
 }
