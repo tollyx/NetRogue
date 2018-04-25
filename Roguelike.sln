@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRogue.Core", "NetRogue.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRouge.CMD", "NetRouge.Console\NetRouge.CMD.csproj", "{D1B9A51F-0E95-4589-B364-9E76D70A3304}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRouge.Tests", "NetRouge.Tests\NetRouge.Tests.csproj", "{B253BEB3-4706-4D8F-80F2-AA41E583372D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRogue.CoreTests", "NetRogue.CoreTests\NetRogue.CoreTests.csproj", "{84009652-F19F-4CA7-95DE-38E0E02F7BED}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{D1B9A51F-0E95-4589-B364-9E76D70A3304}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1B9A51F-0E95-4589-B364-9E76D70A3304}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1B9A51F-0E95-4589-B364-9E76D70A3304}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B253BEB3-4706-4D8F-80F2-AA41E583372D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B253BEB3-4706-4D8F-80F2-AA41E583372D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B253BEB3-4706-4D8F-80F2-AA41E583372D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B253BEB3-4706-4D8F-80F2-AA41E583372D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{84009652-F19F-4CA7-95DE-38E0E02F7BED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{84009652-F19F-4CA7-95DE-38E0E02F7BED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84009652-F19F-4CA7-95DE-38E0E02F7BED}.Release|Any CPU.ActiveCfg = Release|Any CPU
