@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace NetRogue.Core {
-    public class QuadTree<T> : IEnumerable<T> where T: class, IEntity {
+    public class QuadTree<T> : ICollection<T>, IEnumerable<T> where T : class, IEntity {
         readonly Rect bounds;
         readonly int depth;
         readonly int maxDepth;
@@ -14,6 +14,17 @@ namespace NetRogue.Core {
 
         QuadTree<T>[] children;
         List<T> entities;
+
+        public int Count {
+            get {
+                if (children == null) {
+                    return entities.Count;
+                }
+                return children.Select(c => c.Count).Sum();
+            }
+        }
+
+        public bool IsReadOnly => false;
 
         public QuadTree(Rect bounds, int maxEntities = 10, int maxDepth = 3) : this(bounds, maxEntities, maxDepth, 0) {}
 
@@ -30,7 +41,7 @@ namespace NetRogue.Core {
             if(bounds.Contains(entity.Position)) {
                 if (children == null) {
                     entities.Add(entity);
-                    if (depth != maxDepth && entities.Count >= maxEntities) {
+                    if (depth < maxDepth && entities.Count > maxEntities) {
                         Divide();
                     }
                     return true;
@@ -63,16 +74,20 @@ namespace NetRogue.Core {
         }
 
         void Divide() {
-            if (children != null) return;
-            if (maxDepth == depth) return;
-            int childW = bounds.w / 2;
-            int childH = bounds.h / 2;
+            if (children != null) return; // Don't divide if we've already divided
+            if (maxDepth <= depth) return;
+            if (bounds.w <= 1 || bounds.h <= 1) return; // We're small enough already
+
+            // Using ceil, since we'd rather have overlapping children
+            // than be missing entities due to rounding errors
+            int childW = (int)Math.Ceiling(bounds.w / 2.0);
+            int childH = (int)Math.Ceiling(bounds.h / 2.0);
 
             children = new QuadTree<T>[] {
-                new QuadTree<T>(new Rect(bounds.Left, bounds.Top, bounds.w / 2, bounds.h / 2), maxDepth, depth+1),
-                new QuadTree<T>(new Rect(bounds.Left + bounds.w / 2, bounds.Top, bounds.w / 2, bounds.h / 2), maxDepth, depth+1),
-                new QuadTree<T>(new Rect(bounds.Left, bounds.Top + bounds.h / 2, bounds.w / 2, bounds.h / 2), maxDepth, depth+1),
-                new QuadTree<T>(new Rect(bounds.Left + bounds.w / 2, bounds.Top + bounds.h / 2, bounds.w / 2, bounds.h / 2), maxDepth, depth+1),
+                new QuadTree<T>(new Rect(bounds.Left, bounds.Top, childW, childH), maxEntities, maxDepth, depth+1),
+                new QuadTree<T>(new Rect(bounds.Left + childW, bounds.Top, childW, childH), maxEntities, maxDepth, depth+1),
+                new QuadTree<T>(new Rect(bounds.Left, bounds.Top + childH, childW, childH), maxEntities, maxDepth, depth+1),
+                new QuadTree<T>(new Rect(bounds.Left + childW, bounds.Top + childH, childW, childH), maxEntities, maxDepth, depth+1),
             };
 
             foreach (var item in entities) {
@@ -148,6 +163,13 @@ namespace NetRogue.Core {
             return isClean;
         }
 
+        public int GetCurrentDepth() {
+            if (children == null) {
+                return depth;
+            }
+            return children.Select(c => c.GetCurrentDepth()).Max();
+        }
+
         public IEnumerator<T> GetEnumerator() {
             if (children == null) {
                 return entities.GetEnumerator();
@@ -159,7 +181,7 @@ namespace NetRogue.Core {
                     e = item;
                 }
                 else {
-                    e.Concat(item);
+                    e = e.Concat(item);
                 }
             }
             return e.GetEnumerator();
@@ -167,6 +189,43 @@ namespace NetRogue.Core {
 
         IEnumerator IEnumerable.GetEnumerator() {
             return GetEnumerator();
+        }
+
+        void ICollection<T>.Add(T item) {
+            Add(item);
+        }
+
+        public void Clear() {
+            children = null;
+            if (entities != null) {
+                entities.Clear();
+            }
+            else {
+                entities = new List<T>();
+            }
+        }
+
+        public bool Contains(T item) {
+            if (children == null) {
+                return entities.Contains(item);
+            }
+
+            foreach (var child in children) {
+                if (child.Contains(item)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void CopyTo(T[] array, int arrayIndex) {
+            var e = GetEnumerator();
+            for (int i = arrayIndex; i < array.Length; i++) {
+                if (!e.MoveNext()) {
+                    break;
+                }
+                array[i] = e.Current;
+            }
         }
     }
 }

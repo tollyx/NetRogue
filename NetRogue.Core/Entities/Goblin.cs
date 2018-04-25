@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace NetRogue.Core {
-    class Goblin : Actor {
+    public class Goblin : Actor {
         public override Tile Glyph => Tile.Goblin;
 
         public override bool IsPlayer => false;

@@ -25,7 +25,7 @@ namespace NetRogue.Core {
             AStarNode startnode = new AStarNode {
                 pos = start,
                 costFromStart = 0,
-                potentialCostToEnd = Point.Distance(start, end),
+                potentialCostToEnd = (float)Point.Distance(start, end),
                 previous = null,
             };
             open.Add(startnode);
@@ -57,7 +57,7 @@ namespace NetRogue.Core {
                         open.Add(new AStarNode {
                             pos = item,
                             costFromStart = current.costFromStart + 1,
-                            potentialCostToEnd = Point.Distance(item, end) + current.costFromStart + 1,
+                            potentialCostToEnd = (float)Point.Distance(item, end) + current.costFromStart + 1,
                             previous = current,
                         });
                     }

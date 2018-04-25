@@ -12,15 +12,15 @@ namespace NetRogue.Core {
         public int h;
 
         public int Left => x;
-        public int Right => x + w;
+        public int Right => x + w-1;
         public int Top => y;
-        public int Bottom => y + h;
+        public int Bottom => y + h-1;
         public Point TopLeft => new Point(Left, Top);
         public Point BottomLeft => new Point(Left, Bottom);
         public Point TopRight => new Point(Right, Top);
         public Point BottomRight => new Point(Right, Bottom);
 
-        public Rect(int w, int h) : this(0, 0, w, h) { }
+        public Rect(int width, int height) : this(0, 0, width, height) { }
 
         public Rect(int x, int y, int w, int h) {
             this.x = x;
@@ -30,7 +30,7 @@ namespace NetRogue.Core {
         }
 
         public bool Contains(Point p) {
-            return Contains(x, y);
+            return Contains(p.x, p.y);
         }
 
         public bool Contains(int px, int py) {

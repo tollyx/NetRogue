@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NetRogue.Core {
     public class Log : ILogger {
@@ -18,6 +19,10 @@ namespace NetRogue.Core {
 
         public void Add(string msg) {
             messages.Add(msg);
+        }
+
+        public IEnumerable<string> GetLast(int amount = 1) {
+            return messages.Skip(Math.Max(0, messages.Count - amount));
         }
 
         public static void SetLogger(ILogger logger) {

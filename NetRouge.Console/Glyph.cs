@@ -14,17 +14,6 @@ namespace NetRogue.CMD {
             this.back = back;
         }
 
-        public override bool Equals(object obj) {
-            if (!(obj is Glyph)) {
-                return false;
-            }
-
-            var glyph = (Glyph)obj;
-            return character == glyph.character &&
-                   fore == glyph.fore &&
-                   back == glyph.back;
-        }
-
         public override int GetHashCode() {
             var hashCode = -2243911;
             hashCode = hashCode * -1521134295 + base.GetHashCode();
@@ -32,6 +21,13 @@ namespace NetRogue.CMD {
             hashCode = hashCode * -1521134295 + fore.GetHashCode();
             hashCode = hashCode * -1521134295 + back.GetHashCode();
             return hashCode;
+        }
+
+        public override bool Equals(object obj) {
+            if (!(obj is Glyph)) {
+                return false;
+            }
+            return Equals((Glyph)obj);
         }
 
         public bool Equals(Glyph other) {

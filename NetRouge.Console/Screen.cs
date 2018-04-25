@@ -91,12 +91,12 @@ namespace NetRogue.CMD {
             //    Point screenpos = item - offset + mapArea.TopLeft;
             //    screen[ToIndex(screenpos)].back = ConsoleColor.DarkYellow;
             //}
+            Draw(world.Player.Name, 0, 0);
+            Draw($"HP:{world.Player.Health}", 0, 1);
+            Draw($"STR:{world.Player.Strength}", 0, 2);
+            Draw($"DEF:{world.Player.Defence}", 0, 3);
 
-            Draw($"HP:{world.Player.Health}", 0, 0);
-            Draw($"STR:{world.Player.Strength}", 0, 1);
-            Draw($"DEF:{world.Player.Defence}", 0, 2);
-
-            var msg = world.Log.Messages.Reverse<string>().Take(height - mapArea.Bottom).Reverse();
+            var msg = world.Log.GetLast(height - mapArea.Bottom).Reverse();
             var y = height-1;
             foreach (var item in msg) {
                 Draw(item, 0, y--);
@@ -107,8 +107,11 @@ namespace NetRogue.CMD {
 
         void CalcDirty() {
             dirty = false;
-            for (int i = 0; !dirty && i < screen.Length; i++) {
-                dirty = screen[i] != previous[i];
+            for (int i = 0; i < screen.Length; i++) {
+                if (screen[i] != previous[i]) {
+                    dirty = true;
+                    break;
+                }
             }
         }
 
