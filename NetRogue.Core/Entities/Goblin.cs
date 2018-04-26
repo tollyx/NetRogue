@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetRogue.Core {
+namespace NetRogue.Core.Entities {
     public class Goblin : Actor {
         public override Tile Glyph => Tile.Goblin;
 

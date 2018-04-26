@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NetRogue.Core {
+namespace NetRogue.Core.Entities {
     public abstract class Actor : IEntity {
         Point position;
         public Point Position { get => position; }

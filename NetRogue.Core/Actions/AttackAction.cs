@@ -1,4 +1,6 @@
-﻿namespace NetRogue.Core {
+﻿using NetRogue.Core.Entities;
+
+namespace NetRogue.Core {
     public class AttackAction : ActorAction {
         private Actor target;
 
