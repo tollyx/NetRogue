@@ -61,6 +61,7 @@
     <Compile Include="QuadTree.cs" />
     <Compile Include="Rect.cs" />
     <Compile Include="Tile.cs" />
+    <Compile Include="TileMap.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
