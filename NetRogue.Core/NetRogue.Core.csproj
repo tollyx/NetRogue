@@ -54,6 +54,7 @@
     <Compile Include="InputMap.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Actions\MoveAction.cs" />
+    <Compile Include="LimitedList.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="PathFinder.cs" />
     <Compile Include="Point.cs" />
