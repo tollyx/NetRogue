@@ -10,13 +10,13 @@ namespace NetRogue.Core.Actions {
 
         public override bool Execute(World world) {
             var newpos = actor.Position + dir.ToPoint();
-            if (world.GetActorAt(newpos) == null 
+            if (world.Level.GetActorAt(newpos) == null 
              && world.Level.Map.IsInsideBounds(newpos) 
              && world.Level.Map.GetTile(newpos) != Tile.Wall) 
             {
-                world.Tree.Remove(actor);
+                world.Level.ActorTree.Remove(actor);
                 actor.Move(dir);
-                world.Tree.Add(actor);
+                world.Level.ActorTree.Add(actor);
                 return true;
             }
             return false;

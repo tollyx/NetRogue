@@ -28,7 +28,7 @@ namespace NetRogue.Core.Entities {
                 var path = PathFinder.AStar(world.Level, Position, world.Player.Position);
                 if (path.Any()) {
                     var next = path.First();
-                    var act = world.GetActorAt(next);
+                    var act = world.Level.GetActorAt(next);
                     if (act == null) {
                         Action = new MoveAction(this, (next - Position).Direction());
                     }

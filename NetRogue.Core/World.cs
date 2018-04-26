@@ -12,13 +12,8 @@ namespace NetRogue.Core {
         int ticks;
         int currentActor;
 
-        public IReadOnlyList<Actor> Actors { get => actors; }
-        List<Actor> actors;
-        List<Item> items;
-        QuadTree<Actor> acttree;
-        QuadTree<Item> itemtree;
-        public Actor Player { get; private set; }
-        public QuadTree<Actor> Tree { get => acttree; }
+        public Player Player { get; private set; }
+
         public Log Log { get; private set; }
 
         public World() {
@@ -26,29 +21,11 @@ namespace NetRogue.Core {
             ticks = 0;
             level = Level.GenerateMazeLevel(64, 24, Environment.TickCount);
             Player = new Player(1, 1);
-            actors = new List<Actor> {
-                Player,
-                new Goblin(1, 23),
-                new Goblin(63, 1),
-                new Goblin(63, 23),
-            };
-            items = new List<Item> {
-                Item.Coin(3, 3),
-                Item.Coin(3, 5),
-                Item.Coin(5, 7),
-            };
-            acttree = new QuadTree<Actor>(new Rect(64, 24));
-            foreach (var item in actors) {
-                acttree.Add(item);
-            }
-        }
-
-        public Actor GetActorAt(Point pos) {
-            return acttree.GetAt(pos);
+            level.AddActor(Player);
         }
 
         public bool IsPlayerTurn() {
-            return actors[currentActor].IsPlayer;
+            return level.Actors[currentActor].IsPlayer;
         }
 
         public void SetPlayerAction(IActorAction action) {
@@ -56,7 +33,7 @@ namespace NetRogue.Core {
         }
 
         public void SetPlayerMove(Direction dir) {
-            var act = GetActorAt(Player.Position + dir.ToPoint());
+            var act = Level.GetActorAt(Player.Position + dir.ToPoint());
             if (act == null) {
                 SetPlayerAction(new MoveAction(Player, dir));
             }
@@ -67,7 +44,7 @@ namespace NetRogue.Core {
 
         public bool Tick() {
             ticks++;
-            var current = actors[currentActor];
+            var current = level.Actors[currentActor];
             current.Think(this);
             if (current.Action == null) return false;
 
@@ -75,26 +52,22 @@ namespace NetRogue.Core {
                 current.Tick(this);
                 current.Action = null;
 
-                currentActor++;
-                Cleanup();
-                currentActor %= actors.Count;
+                // Switch to the next actor, skipping any dead ones.
+                do {
+                    currentActor++;
+                    currentActor %= level.Actors.Count;
+                } while (!level.Actors[currentActor].IsAlive);
+
+                // Remember the current actor and gets its index after cleanup,
+                // since its index might change after the cleanup.
+                var act = level.Actors[currentActor];
+                level.Cleanup();
+                currentActor = level.GetActorIndex(act);
+
                 return true;
             }
             current.Action = null;
             return false;
-        }
-
-        public void Cleanup() {
-            for (int i = actors.Count - 1; i >= 0; i--) {
-                if (!actors[i].IsAlive) {
-                    acttree.Remove(actors[i]);
-                    actors.RemoveAt(i);
-                    if (currentActor > i) {
-                        currentActor--;
-                    }
-                }
-            }
-            acttree.Cleanup();
         }
     }
 }

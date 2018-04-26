@@ -79,6 +79,7 @@ namespace NetRogue.CMD {
             Draw(world.Level, offset.x, offset.y, mapArea);
 
             foreach (var act in world.Actors) {
+            foreach (var act in world.Level.Actors) {
                 var screenpos = act.Position - offset + mapArea.TopLeft;
                 if (mapArea.Contains(screenpos)) {
                     screen[ToIndex(screenpos)] = glyphs[(int)act.Glyph];
