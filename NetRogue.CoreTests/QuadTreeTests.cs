@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NetRogue.Core;
+using NetRogue.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,11 @@ namespace NetRogue.Core.Tests {
             Rect bounds = new Rect(100, 100);
             QuadTree<Actor> actors = new QuadTree<Actor>(bounds, 2, 3);
 
-            Assert.IsTrue(actors.Add(new Goblin(1, 1)));
-            Assert.IsTrue(actors.Add(new Goblin(2, 2)));
-            Assert.IsTrue(actors.Add(new Goblin(97, 97)));
-            Assert.IsTrue(actors.Add(new Goblin(98, 98)));
+            Assert.IsTrue(actors.Add(new Goblin(0, 0)));
+            Assert.IsTrue(actors.Add(new Goblin(99, 99)));
 
-            Assert.IsFalse(actors.Add(new Goblin(102, 0)));
+            Assert.IsFalse(actors.Add(new Goblin(-12, 0)));
+            Assert.IsFalse(actors.Add(new Goblin(0, 100)));
         }
 
         [TestMethod()]
@@ -37,7 +37,9 @@ namespace NetRogue.Core.Tests {
             };
 
             foreach (var item in actors) {
-                tree.Add(item);
+                if (!tree.Add(item)) {
+                    Assert.Inconclusive();
+                }
             }
 
             Assert.IsTrue(tree.Remove(actors[5]));
@@ -52,7 +54,23 @@ namespace NetRogue.Core.Tests {
 
         [TestMethod()]
         public void GetAtTest() {
-            Assert.Inconclusive();
+            Rect bounds = new Rect(16, 16);
+            QuadTree<Actor> tree = new QuadTree<Actor>(bounds, 2, 3);
+            List<Actor> actors = new List<Actor> {
+                new Goblin(4, 0),
+                new Goblin(3, 5),
+                new Goblin(5, 15),
+            };
+
+            foreach (var item in actors) {
+                if (!tree.Add(item)) {
+                    Assert.Inconclusive();
+                }
+            }
+
+            foreach (var item in actors) {
+                Assert.AreEqual(item, tree.GetAt(item.Position), $"Could not get actor at position {item.Position}");
+            }
         }
 
         [TestMethod()]
@@ -72,16 +90,14 @@ namespace NetRogue.Core.Tests {
             List<Actor> actors = new List<Actor> {
                 new Goblin(0, 0),
                 new Goblin(1, 1),
-                new Goblin(2, 2),
-                new Goblin(3, 3),
-                new Goblin(0, 7),
-                new Goblin(1, 6),
                 new Goblin(2, 5),
                 new Goblin(3, 4),
             };
 
             foreach (var item in actors) {
-                tree.Add(item);
+                if (!tree.Add(item)) {
+                    Assert.Inconclusive();
+                }
             }
             var fromtree = tree.ToList(); // ...and back to a list again via the enumerator
 
@@ -101,12 +117,16 @@ namespace NetRogue.Core.Tests {
             Assert.AreEqual(0, tree.GetCurrentDepth());
 
             foreach (var item in actors) {
-                tree.Add(item);
+                if (!tree.Add(item)) {
+                    Assert.Inconclusive();
+                }
             }
 
             Assert.AreEqual(0, tree.GetCurrentDepth());
 
-            tree.Add(new Goblin(16, 16));
+            if (!tree.Add(new Goblin(16, 16))) {
+                Assert.Inconclusive();
+            }
 
             Assert.AreEqual(1, tree.GetCurrentDepth());
         }

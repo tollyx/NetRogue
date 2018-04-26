@@ -39,36 +39,34 @@ namespace NetRogue.Core {
         }
 
         public bool Add(T entity) {
-            if(bounds.Contains(entity.Position)) {
-                if (children == null) {
-                    entities.Add(entity);
-                    if (depth < maxDepth && entities.Count > maxEntities) {
-                        Divide();
-                    }
-                    return true;
+            if (!bounds.Contains(entity.Position)) return false;
+
+            if (children == null) {
+                entities.Add(entity);
+                if (depth < maxDepth && entities.Count > maxEntities) {
+                    Divide();
                 }
-                else {
-                    foreach (var item in children) {
-                        if (item.Add(entity)) {
-                            return true;
-                        }
-                    }
+                return true;
+            }
+
+            foreach (var item in children) {
+                if (item.Add(entity)) {
+                    return true;
                 }
             }
             return false;
         }
 
         public bool Remove(T entity) {
-            if (bounds.Contains(entity.Position)) {
-                if (children == null) {
-                    return entities.Remove(entity);
-                }
-                else {
-                    foreach (var item in children) {
-                        if (item.Remove(entity)) {
-                            return true;
-                        }
-                    }
+            if (!bounds.Contains(entity.Position)) return false;
+
+            if (children == null) {
+                return entities.Remove(entity);
+            }
+
+            foreach (var item in children) {
+                if (item.Remove(entity)) {
+                    return true;
                 }
             }
             return false;
