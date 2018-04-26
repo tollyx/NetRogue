@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\IActorAction.cs" />
+    <Compile Include="Actions\PickUpAction.cs" />
     <Compile Include="Entities\Actor.cs" />
     <Compile Include="Actions\ActorAction.cs" />
     <Compile Include="Direction.cs" />
@@ -50,6 +51,7 @@
     <Compile Include="Entities\Item.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Actions\WaitAction.cs" />
+    <Compile Include="FieldOfView.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="InputMap.cs" />
     <Compile Include="Level.cs" />

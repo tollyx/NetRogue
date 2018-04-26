@@ -24,6 +24,7 @@ namespace NetRogue.CMD {
                 if (world.IsPlayerTurn() || !world.Player.IsAlive) {
                     (int x, int y) = world.Player.Position;
                     Console.SetCursorPosition(x, y);
+                    //Console.CursorVisible = true;
                     var key = Console.ReadKey(true);
                     //ActorAction action = input.Parse(key);
                     //world.SetPlayerAction(action);
@@ -47,6 +48,9 @@ namespace NetRogue.CMD {
                             break;
                         case ConsoleKey.Spacebar:
                             world.SetPlayerAction(new WaitAction());
+                            break;
+                        case ConsoleKey.P:
+                            world.SetPlayerAction(new PickUpAction(world.Player, world.Level.GetItemsAt(world.Player.Position).FirstOrDefault()));
                             break;
                         case ConsoleKey.Escape:
                             running = false;

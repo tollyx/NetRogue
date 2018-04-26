@@ -76,6 +76,11 @@ namespace NetRogue.Core {
             return dx * dx + dy * dy;
         }
 
+        public static int ManhattanDistance(Point start, Point end) {
+            var p = start - end;
+            return Math.Abs(p.x) + Math.Abs(p.y);
+        }
+
         public static bool operator !=(Point a, Point b) {
             return !a.Equals(b);
         }

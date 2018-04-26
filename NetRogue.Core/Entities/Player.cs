@@ -5,12 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace NetRogue.Core.Entities {
-    class Player : Actor {
+    public class Player : Actor {
         public override Tile Glyph => Tile.Player;
 
         public override bool IsPlayer => true;
 
         public override string Name => "Hero";
+
+        public LimitedList<Item> Inventory { get; } = new LimitedList<Item>(10);
 
         public Player(Point position) : base(position) { }
 
