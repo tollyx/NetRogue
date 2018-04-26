@@ -12,8 +12,6 @@ namespace NetRogue.CMD {
 
         Glyph[] previous;
         Glyph[] screen;
-        
-        bool dirty = true;
 
         public Screen(int windowWidth, int windowHeight) {
             glyphs = new Glyph[Enum.GetValues(typeof(Tile)).Length];
@@ -42,11 +40,12 @@ namespace NetRogue.CMD {
                 fore = ConsoleColor.Green,
                 back = ConsoleColor.Black,
             };
-            if (glyphs.Length < Enum.GetValues(typeof(Tile)).Length) {
-                // Safety measure to make sure I don't forget to add glyphs for new tiles.
-                // I would've loved to make this a compile-time check.
-                throw new ApplicationException("Too few glyphs are defined! Tell tollyx to go punch himself!");
-            }
+            glyphs[(int)Tile.Coin] = new Glyph {
+                character = '$',
+                fore = ConsoleColor.Yellow,
+                back = ConsoleColor.Black,
+            };
+
             screen = new Glyph[windowWidth * windowHeight];
             previous = new Glyph[windowWidth * windowHeight];
             width = windowWidth;
@@ -86,11 +85,6 @@ namespace NetRogue.CMD {
                 }
             }
 
-            //var path = PathFinder.AStar(world.Level, world.Player.Position, world.Actors.Skip(1).First().Position);
-            //foreach (var item in path) {
-            //    Point screenpos = item - offset + mapArea.TopLeft;
-            //    screen[ToIndex(screenpos)].back = ConsoleColor.DarkYellow;
-            //}
             Draw(world.Player.Name, 0, 0);
             Draw($"HP:{world.Player.Health}", 0, 1);
             Draw($"STR:{world.Player.Strength}", 0, 2);
@@ -100,18 +94,6 @@ namespace NetRogue.CMD {
             var y = height-1;
             foreach (var item in msg) {
                 Draw(item, 0, y--);
-            }
-
-            CalcDirty();
-        }
-
-        void CalcDirty() {
-            dirty = false;
-            for (int i = 0; i < screen.Length; i++) {
-                if (screen[i] != previous[i]) {
-                    dirty = true;
-                    break;
-                }
             }
         }
 
@@ -172,7 +154,6 @@ namespace NetRogue.CMD {
                 }
             }
             screen.CopyTo(previous, 0);
-            dirty = false;
         }
 
         internal void Resize(int windowWidth, int windowHeight) {
@@ -185,7 +166,6 @@ namespace NetRogue.CMD {
                 Console.Clear();
                 Console.SetBufferSize(width + Console.WindowLeft, height + Console.WindowTop);
                 Console.CursorVisible = false;
-                dirty = true;
             }
         }
     }

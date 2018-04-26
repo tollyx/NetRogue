@@ -13,9 +13,11 @@ namespace NetRogue.Core {
 
         public IReadOnlyList<Actor> Actors { get => actors; }
         List<Actor> actors;
-        QuadTree<Actor> tree;
+        List<Item> items;
+        QuadTree<Actor> acttree;
+        QuadTree<Item> itemtree;
         public Actor Player { get; private set; }
-        public QuadTree<Actor> Tree { get => tree; }
+        public QuadTree<Actor> Tree { get => acttree; }
         public Log Log { get; private set; }
 
         public World() {
@@ -29,14 +31,19 @@ namespace NetRogue.Core {
                 new Goblin(63, 1),
                 new Goblin(63, 23),
             };
-            tree = new QuadTree<Actor>(new Rect(64, 24));
+            items = new List<Item> {
+                Item.Coin(3, 3),
+                Item.Coin(3, 5),
+                Item.Coin(5, 7),
+            };
+            acttree = new QuadTree<Actor>(new Rect(64, 24));
             foreach (var item in actors) {
-                tree.Add(item);
+                acttree.Add(item);
             }
         }
 
         public Actor GetActorAt(Point pos) {
-            return tree.GetAt(pos);
+            return acttree.GetAt(pos);
         }
 
         public bool IsPlayerTurn() {
@@ -79,14 +86,14 @@ namespace NetRogue.Core {
         public void Cleanup() {
             for (int i = actors.Count - 1; i >= 0; i--) {
                 if (!actors[i].IsAlive) {
-                    tree.Remove(actors[i]);
+                    acttree.Remove(actors[i]);
                     actors.RemoveAt(i);
                     if (currentActor > i) {
                         currentActor--;
                     }
                 }
             }
-            tree.Cleanup();
+            acttree.Cleanup();
         }
     }
 }

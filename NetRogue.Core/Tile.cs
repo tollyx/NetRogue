@@ -5,5 +5,6 @@
         Floor,
         Player,
         Goblin,
+        Coin,
     }
 }
