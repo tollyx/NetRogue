@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetRogue.Core;
+using NetRogue.Core.Actions;
 
 namespace NetRogue.CMD {
     class Program {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetRogue.Core.Actions;
+using System;
 
 namespace NetRogue.Core.Entities {
     public abstract class Actor : IEntity {

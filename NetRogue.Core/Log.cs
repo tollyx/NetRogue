@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+// TODO: Keep track of which messages are new
+
 namespace NetRogue.Core {
     public class Log : ILogger {
         private static ILogger singleton;

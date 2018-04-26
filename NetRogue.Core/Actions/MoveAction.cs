@@ -1,6 +1,6 @@
 ﻿using NetRogue.Core.Entities;
 
-namespace NetRogue.Core {
+namespace NetRogue.Core.Actions {
     public class MoveAction : ActorAction {
         Direction dir;
 
