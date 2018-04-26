@@ -103,5 +103,9 @@ namespace NetRogue.Core {
         public bool Equals(Point other) {
             return x == other.x && y == other.y;
         }
+
+        public override string ToString() {
+            return $"(x:{x}, y:{y})";
+        }
     }
 }

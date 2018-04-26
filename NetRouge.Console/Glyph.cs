@@ -24,9 +24,7 @@ namespace NetRogue.CMD {
         }
 
         public override bool Equals(object obj) {
-            if (!(obj is Glyph)) {
-                return false;
-            }
+            if (!(obj is Glyph)) return false;
             return Equals((Glyph)obj);
         }
 

@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace NetRogue.Core {
     public struct Rect {
-        public int x;
-        public int y;
-        public int w;
-        public int h;
+        public int x, y, w, h;
 
         public int Left => x;
         public int Right => x + w-1;
         public int Top => y;
         public int Bottom => y + h-1;
+
+        public int Area => w * h;
+
         public Point TopLeft => new Point(Left, Top);
         public Point BottomLeft => new Point(Left, Bottom);
         public Point TopRight => new Point(Right, Top);
@@ -42,11 +42,41 @@ namespace NetRogue.Core {
                   || Bottom < other.Top || Top > other.Bottom);
         }
 
+        /// <summary>
+        /// Gets a rect representing the intersection between two rects
+        /// </summary>
+        /// <param name="other">The other intersecting rect</param>
+        /// <returns>The intersecting area between the two rects</returns>
+        public Rect GetIntersection(Rect other) {
+            int ix = Math.Max(Left, other.Left);
+            int iy = Math.Max(Top, other.Top);
+            int iw = Math.Min(Right, other.Right) - ix;
+            int ih = Math.Min(Bottom, other.Bottom) - iy;
+            return new Rect(ix, iy, iw, ih);
+        }
+
+        /// <summary>
+        /// Gets a rect that contains both rects
+        /// </summary>
+        /// <param name="other">The other rect to contain</param>
+        /// <returns>A rect that contains both rects</returns>
+        public Rect GetContainer(Rect other) {
+            int ix = Math.Min(Left, other.Left);
+            int iy = Math.Min(Top, other.Top);
+            int iw = Math.Max(Right, other.Right) - ix;
+            int ih = Math.Max(Bottom, other.Bottom) - iy;
+            return new Rect(ix, iy, iw, ih);
+        }
+
         public void Destruct(out int x, out int y, out int w, out int h) {
             x = this.x;
             y = this.y;
             w = this.w;
             h = this.h;
+        }
+
+        public override string ToString() {
+            return $"(x:{x}, y:{y}, w:{w}, h:{h})";
         }
     }
 }
