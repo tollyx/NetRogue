@@ -73,7 +73,7 @@ namespace NetRogue.CMD {
         internal void Draw(World world) {
             Clear();
 
-            Rect mapArea = new Rect(6, 0, world.Level.Width+1, world.Level.Height+1);
+            Rect mapArea = new Rect(6, 0, world.Level.Map.Width+2, world.Level.Map.Height+2);
             Point offset = new Point(0, 0);
 
             Draw(world.Level, offset.x, offset.y, mapArea);
@@ -124,7 +124,7 @@ namespace NetRogue.CMD {
             top = Math.Max(0, top);
             for (int y = top; y < bottom; y++) {
                 for (int x = left; x < right; x++) {
-                    screen[ToIndex(x, y)] = glyphs[(int)level.GetTile(offx + x - left, offy + y - top)];
+                    screen[ToIndex(x, y)] = glyphs[(int)level.Map.GetTile(offx + x - left, offy + y - top)];
                 }
             }
         }

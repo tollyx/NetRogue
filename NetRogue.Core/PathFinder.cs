@@ -51,7 +51,7 @@ namespace NetRogue.Core {
                     current.pos + new Point(-1,0),
                     current.pos + new Point(0,-1),
                 };
-                var valid = neigh.Where(x => map.GetTile(x) == Tile.Floor);
+                var valid = neigh.Where(x => map.Map.GetTile(x) == Tile.Floor);
                 foreach (var item in valid) {
                     if (!closed.Contains(item) && open.All(x => x.pos != item)) {
                         open.Add(new AStarNode {

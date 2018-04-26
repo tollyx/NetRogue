@@ -4,53 +4,10 @@ using System.Linq;
 
 namespace NetRogue.Core {
     public class Level {
-        public readonly int Width;
-        public readonly int Height;
-
-        private Tile[,] tiles;
-        private Tile initial;
+        public TileMap<Tile> Map { get; private set; }
 
         public Level(int width, int height, Tile initial = Tile.None) {
-            this.initial = initial;
-            Width = width;
-            Height = height;
-            tiles = new Tile[width, height];
-            if (initial != Tile.None) {
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        tiles[x, y] = initial;
-                    }
-                }
-            }
-        }
-
-        public bool IsInsideBounds(Point p) {
-            return IsInsideBounds(p.x, p.y);
-        }
-
-        public bool IsInsideBounds(int x, int y) {
-            return x >= 0 && x < Width && y >= 0 && y < Height;
-        }
-
-        public Tile GetTile(int x, int y) {
-            if (IsInsideBounds(x, y)) {
-                return tiles[x, y];
-            }
-            return initial;
-        }
-
-        public void SetTile(int x, int y, Tile t) {
-            if (IsInsideBounds(x, y)) {
-                tiles[x, y] = t;
-            }
-        }
-
-        public void SetTile(Point point, Tile tile) {
-            SetTile(point.x, point.y, tile);
-        }
-
-        public Tile GetTile(Point point) {
-            return GetTile(point.x, point.y);
+            Map = new TileMap<Tile>(width, height, initial);
         }
 
         public static Level GenerateMazeLevel(int width, int height, int seed) {
@@ -65,7 +22,7 @@ namespace NetRogue.Core {
 
             while(pointStack.Any()) {
                 var point = pointStack.Peek();
-                level.SetTile(point, Tile.Floor);
+                level.Map.SetTile(point, Tile.Floor);
 
                 // We are incrementing by two to make sure turns only happen on even or odd tiles, not both.
                 // Makes the maze much less messy and simplifies the "can we dig here?" check by a lot.
@@ -76,11 +33,14 @@ namespace NetRogue.Core {
                     new Point(0, 2) + point,
                 };
 
-                var candidates = neigh.Where(p => level.IsInsideBounds(p) && (level.GetTile(p) == Tile.Wall || rng.Next() % 80 == 0)).ToList();
+                var candidates = neigh.Where(p => 
+                        level.Map.IsInsideBounds(p) && 
+                        (level.Map.GetTile(p) == Tile.Wall || rng.Next() % 80 == 0)
+                    ).ToList();
                 if (candidates.Any()) {
                     var next = candidates[rng.Next(candidates.Count)];
                     var tween = point + (next - point) / 2;
-                    level.SetTile(tween, Tile.Floor);
+                    level.Map.SetTile(tween, Tile.Floor);
                     pointStack.Push(next);
                 }
                 else {
